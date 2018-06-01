@@ -1,6 +1,8 @@
 ﻿# Huygens
 Cut down CassiniDev server for internally hosting IIS sites
 
+https://www.nuget.org/packages/Huygens
+
 Derived from https://archive.codeplex.com/?p=cassinidev and released under the same license.
 
 Library to load, host and run ASP.Net websites inside your own process.
