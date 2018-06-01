@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>Huygens</id>
+    <version>1.0.0</version>
+    <title>Huygens</title>
+    <authors>IainBallard</authors>
+    <owners></owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <projectUrl>https://github.com/i-e-b/Huygens</projectUrl>
+    <description>Library to load, host and run ASP.Net websites inside your own process.
+Has functionality equivalent to the IIS Developer server.
+Can expose IP ports or keep sites internal to your process.
+Supports .Net MVC and Web APIs</description>
+    <summary>Cut down CassiniDev server for internally hosting IIS sites</summary>
+  </metadata>
+  <files>
+    <file src="lib\net46\Huygens.dll" target="lib\net46\Huygens.dll" />
+    <file src="lib\net46\Huygens.pdb" target="lib\net46\Huygens.pdb" />
+    <file src="lib\net46\Huygens.xml" target="lib\net46\Huygens.xml" />
+  </files>
+</package>

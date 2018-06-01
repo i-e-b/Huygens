@@ -3,6 +3,11 @@ Cut down CassiniDev server for internally hosting IIS sites
 
 Derived from https://archive.codeplex.com/?p=cassinidev and released under the same license.
 
+Library to load, host and run ASP.Net websites inside your own process.
+Has functionality equivalent to the IIS Developer server.
+Can expose IP ports or keep sites internal to your process.
+Supports .Net MVC and Web APIs
+
 ## Internal hosting
 
 You can host a site without exposing on an IP port like this:
