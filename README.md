@@ -47,3 +47,7 @@ using (var server = SocketServer(32768, "/", @"C:\inetpub\wwwroot\PublishSample"
     server.Stop();
 }
 ```
+
+## Azure hosting
+
+You can't use the `SocketServer` on Azure, due to permissions limitations. The `DirectServer` is usable as long as you have a **B1** or higher application service plan, and your host app has the *Application Setting* `WEBSITE_LOAD_USER_PROFILE` = `1`
