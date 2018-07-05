@@ -19,7 +19,6 @@ using System.Net;
 using System.Net.Sockets;
 using System.Security.Permissions;
 using System.Threading;
-using System.Web.Hosting;
 using Huygens.Internal;
 
 namespace Huygens
@@ -77,7 +76,6 @@ namespace Huygens
                                 ? PhysicalPath
                                 : PhysicalPath + "\\";
 
-            _applicationManager = ApplicationManager.GetApplicationManager();
             string uniqueAppString = string.Concat(virtualPath, physicalPath,":",Port.ToString()).ToLowerInvariant();
             AppId = (uniqueAppString.GetHashCode()).ToString("x", CultureInfo.InvariantCulture);
         }

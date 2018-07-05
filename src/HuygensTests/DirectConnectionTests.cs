@@ -11,7 +11,7 @@ namespace HuygensTests
     {
         [Test]
         public void basic_test () {
-            using (var subject = new DirectServer(@"C:\Temp\WrappedSites\PublishSample")) // a published site
+            using (var subject = new DirectServer(@"C:\Temp\WrappedSites\1_rolling")) // a published site
             {
                 var request = new SerialisableRequest{
                     Method = "GET",
@@ -33,7 +33,7 @@ namespace HuygensTests
 
         [Test]
         public void a_server_can_accept_repeated_calls () {
-            using (var subject = new DirectServer(@"C:\Temp\WrappedSites\PublishSample")) // a published site
+            using (var subject = new DirectServer(@"C:\Temp\WrappedSites\1_rolling")) // a published site
             {
                 var request = new SerialisableRequest{
                     Method = "GET",

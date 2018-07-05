@@ -20,6 +20,7 @@ using System.Linq;
 using System.Security;
 using System.Security.Permissions;
 using System.Text;
+using System.Threading;
 using System.Web;
 using System.Web.Hosting;
 using Microsoft.Win32.SafeHandles;
@@ -478,7 +479,14 @@ namespace Huygens.Internal
             PrepareResponse();
 
             // Hand the processing over to HttpRuntime
-            HttpRuntime.ProcessRequest(this);
+            try
+            {
+                HttpRuntime.ProcessRequest(this);
+            }
+            catch (ThreadAbortException) // ASP.Net throws these on Response.End(); IIS ignores these and presents the page anyway, so we will too.
+            {
+                Ignore();
+            }
         }
 
         /// <inheritdoc />
@@ -1207,7 +1215,7 @@ namespace Huygens.Internal
             return path;
         }
 
-        #region Nested type: ByteParser
+        private static void Ignore() { }
 
         internal class ByteParser
         {
@@ -1255,10 +1263,6 @@ namespace Huygens.Internal
                 return line;
             }
         }
-
-        #endregion
-
-        #region Nested type: ByteString
 
         internal class ByteString
         {
@@ -1370,7 +1374,5 @@ namespace Huygens.Internal
                 return Substring(offset, _length - offset);
             }
         }
-
-        #endregion
     }
 }

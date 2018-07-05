@@ -10,6 +10,11 @@ Has functionality equivalent to the IIS Developer server.
 Can expose IP ports or keep sites internal to your process.
 Supports .Net MVC and Web APIs
 
+To do:
+* [ ] Decode HTTP chunked?
+* [ ] Ignore thread abort exceptions
+* [ ] Accept null Headers on requests
+
 ## Internal hosting
 
 You can host a site without exposing on an IP port like this:

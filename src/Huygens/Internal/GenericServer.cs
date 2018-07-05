@@ -12,6 +12,7 @@ namespace Huygens.Internal
     public abstract class GenericServer: MarshalByRefObject, IDisposable
     {
         internal ApplicationManager _applicationManager;
+        internal AssemblyReflectionManager _reflectionManager;
         internal string AppId { get; set; }
         internal AppDomain HostAppDomain
         {
@@ -66,6 +67,14 @@ namespace Huygens.Internal
         /// </summary>
         public abstract void ShutDown();
 
+        /// <summary>
+        /// Setup
+        /// </summary>
+        protected GenericServer()
+        {
+            _applicationManager = ApplicationManager.GetApplicationManager();
+            _reflectionManager = new AssemblyReflectionManager();
+        }
 
         /// <summary>
         /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.

@@ -44,6 +44,7 @@ namespace Huygens.Internal
         public Host()
         {
             HostingEnvironment.RegisterObject(this);
+            HostingEnvironment.MaxConcurrentRequestsPerCPU = 20;
         }
 
         /// <summary>

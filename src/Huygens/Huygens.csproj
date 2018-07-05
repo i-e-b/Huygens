@@ -39,6 +39,22 @@
     <Reference Include="System.Web" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Compatibility\HttpContextWrapper.cs" />
+    <Compile Include="Compatibility\HttpConverters.cs" />
+    <Compile Include="Compatibility\HttpListenerContextWrapper.cs" />
+    <Compile Include="Compatibility\HttpListenerRequestWrapper.cs" />
+    <Compile Include="Compatibility\HttpListenerResponseWrapper.cs" />
+    <Compile Include="Compatibility\HttpRequestWrapper.cs" />
+    <Compile Include="Compatibility\HttpResponseWrapper.cs" />
+    <Compile Include="Compatibility\HttpCompatibilityExtensions.cs" />
+    <Compile Include="Compatibility\IContext.cs" />
+    <Compile Include="Compatibility\IHeaderCollection.cs" />
+    <Compile Include="Compatibility\IRequest.cs" />
+    <Compile Include="Compatibility\IResponse.cs" />
+    <Compile Include="Compatibility\NameValueCollectionHeaderWrapper.cs" />
+    <Compile Include="Compatibility\SubstringExtensions.cs" />
+    <Compile Include="Internal\AssemblyReflectionManager.cs" />
+    <Compile Include="Internal\AssemblyReflectionProxy.cs" />
     <Compile Include="Internal\GenericServer.cs" />
     <Compile Include="DirectServer.cs" />
     <Compile Include="Internal\MemoryConnection.cs" />
