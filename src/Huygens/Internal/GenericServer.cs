@@ -11,10 +11,25 @@ namespace Huygens.Internal
     /// </summary>
     public abstract class GenericServer: MarshalByRefObject, IDisposable
     {
-        internal ApplicationManager _applicationManager;
-        internal AssemblyReflectionManager _reflectionManager;
-        internal string AppId { get; set; }
-        internal AppDomain HostAppDomain
+        /// <summary>
+        /// Application manager instance
+        /// </summary>
+        protected ApplicationManager _applicationManager;
+
+        /// <summary>
+        /// Reflection manager instance
+        /// </summary>
+        protected AssemblyReflectionManager _reflectionManager;
+
+        /// <summary>
+        /// Application ID
+        /// </summary>
+        public string AppId { get; internal set; }
+
+        /// <summary>
+        /// App domain hosting the site
+        /// </summary>
+        public AppDomain HostAppDomain
         {
             get
             {
@@ -156,10 +171,9 @@ namespace Huygens.Internal
         /// This is Dmitry's hack to enable running outside of GAC.
         /// There are some errors being thrown when running in proc
         /// </remarks>
-        private object CreateWorkerAppDomainWithHost(string virtualPath, string physicalPath, Type hostType)
+        protected object CreateWorkerAppDomainWithHost(string virtualPath, string physicalPath, Type hostType)
         {
             // create BuildManagerHost in the worker app domain
-            //_applicationManager appManager = _applicationManager.GetApplicationManager();
             Type buildManagerHostType = typeof(HttpRuntime).Assembly.GetType("System.Web.Compilation.BuildManagerHost");
             IRegisteredObject buildManagerHost = _applicationManager.CreateObject(AppId, buildManagerHostType, virtualPath,
                                                                           physicalPath, false);
@@ -177,7 +191,10 @@ namespace Huygens.Internal
             return _applicationManager.CreateObject(AppId, hostType, virtualPath, physicalPath, false);
         }
 
-        private void OnRequestComplete(Guid id, LogInfo requestLog, LogInfo responseLog)
+        /// <summary>
+        /// Request complete invoker
+        /// </summary>
+        protected void OnRequestComplete(Guid id, LogInfo requestLog, LogInfo responseLog)
         {
             RequestComplete?.Invoke(this, new RequestEventArgs(id, requestLog, responseLog));
         }
