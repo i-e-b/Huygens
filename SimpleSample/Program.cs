@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Text;
 using Huygens;
 
@@ -19,6 +20,11 @@ namespace SimpleSample
                     },
                     Content = null
                 };
+                
+                // Attempt to break the bug
+                var versionInfoType = typeof(System.Web.HttpApplication).Assembly.GetType("System.Web.Util.VersionInfo");
+                var exeNameField = versionInfoType.GetField("_exeName", BindingFlags.Static | BindingFlags.NonPublic);
+                exeNameField.SetValue(null, "AnythingElse.exe");
 
                 // This call fails if the exe is named "w3wp.exe", but not otherwise.
                 // There is some janky testing happening in the .Net code I need to figure out.
@@ -29,6 +35,9 @@ namespace SimpleSample
                 //                                  .RecycleLimitMonitor                                <-- maybe a replacable static here?
                 //                                  .AspNetMemoryMonitor :: s_processPrivateBytesLimit  <-- can I fake this?
                 //                System.Web.Hosting.UnsafeIISMethods.MgdGetSiteNameFromId              <-- this is where is blows up (unmanaged crap)
+
+
+                // maybe change System.Web.Util.VersionInfo :: _exeName
 
                 // maybe _applicationManager._theAppManager can be faked out?
 
