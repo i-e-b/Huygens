@@ -173,6 +173,15 @@ namespace Huygens.Internal
         /// </remarks>
         protected object CreateWorkerAppDomainWithHost(string virtualPath, string physicalPath, Type hostType)
         {
+            // If the executing process is named "w3wp.exe", ASP.Net will fail to run with an access violation error.
+            // We 'break' the cached name of the exe here to work around that issue.
+            // If we fail to break, we will continue, but you may get the issue. If you have an exception at System.Web.Hosting.UnsafeIISMethods...
+            // then you will need to fix this again.
+            var versionInfoType = typeof(HttpApplication).Assembly.GetType("System.Web.Util.VersionInfo"); // find the hidden type
+            var exeNameField = versionInfoType?.GetField("_exeName", BindingFlags.Static | BindingFlags.NonPublic); // grab the static cache
+            exeNameField?.SetValue(null, "AnythingElse.exe"); // rename it before we trigger the initial setup.
+
+
             // create BuildManagerHost in the worker app domain
             Type buildManagerHostType = typeof(HttpRuntime).Assembly.GetType("System.Web.Compilation.BuildManagerHost");
             IRegisteredObject buildManagerHost = _applicationManager.CreateObject(AppId, buildManagerHostType, virtualPath,

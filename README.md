@@ -12,7 +12,6 @@ Supports .Net MVC and Web APIs
 
 To do:
 * [ ] Decode HTTP chunked?
-* [ ] Ignore thread abort exceptions
 * [ ] Accept null Headers on requests
 
 ## Internal hosting
@@ -56,3 +55,4 @@ using (var server = SocketServer(32768, "/", @"C:\inetpub\wwwroot\PublishSample"
 ## Azure hosting
 
 You can't use the `SocketServer` on Azure, due to permissions limitations. The `DirectServer` is usable as long as you have a **B1** or higher application service plan, and your host app has the *Application Setting* `WEBSITE_LOAD_USER_PROFILE` = `1`
+You can also host the DirectServer in a 'Web Job', 'Worker Role' or 'Service Fabric' resource.
