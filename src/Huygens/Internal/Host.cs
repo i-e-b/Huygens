@@ -44,8 +44,19 @@ namespace Huygens.Internal
         public Host()
         {
             HostingEnvironment.RegisterObject(this);
-            HostingEnvironment.MaxConcurrentRequestsPerCPU = 20;
+            try
+            {
+                if (HttpRuntime.UsingIntegratedPipeline)
+                {
+                    HostingEnvironment.MaxConcurrentRequestsPerCPU = 20; // maybe expose this?
+                }
+            }
+            catch
+            {
+                Ignore();
+            }
         }
+
 
         /// <summary>
         /// Turn off directory listing pages
@@ -246,5 +257,7 @@ namespace Huygens.Internal
                 Thread.Sleep(250);
             }
         }
+        
+        private static void Ignore() { }
     }
 }

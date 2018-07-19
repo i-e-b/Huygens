@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Reflection;
 using System.Runtime.Remoting;
 using System.Web;
@@ -152,14 +153,58 @@ namespace Huygens.Internal
                 host = _host;
                 if (host != null) return host;
 
-                host = (Host)CreateWorkerAppDomainWithHost(VirtualPath, PhysicalPath, typeof(Host));
+                object proxy = null;
+                try
+                {
+                    AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
+                    proxy = CreateWorkerAppDomainWithHost(VirtualPath, PhysicalPath, typeof(Host));
+                    host = (Host)proxy;
+                }
+                catch (InvalidCastException ex)
+                {
+                    throw new ApplicationException("Reflection casting exception in CreateWorkerAppDomainWithHost. Possibly bad AppDomain paths.\r\n"
+                        + GetVersionInfo(typeof(Host))
+                        + GetVersionInfo(proxy?.GetType()), ex);
+                }
+                finally {
+                    AppDomain.CurrentDomain.AssemblyResolve -= CurrentDomain_AssemblyResolve;
+                }
                 host.Configure(this, Port, VirtualPath, PhysicalPath, DisableDirectoryListing);
                 _host = host;
             }
 
             return host;
         }
-        
+
+        private Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)
+        {
+            try
+            {
+                var assembly = Assembly.Load(args.Name);
+                if (assembly != null) return assembly;
+            }
+            catch
+            { 
+                // Ignore
+            }
+
+            var parts = args.Name.Split(',');
+            var file = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "\\" + parts[0].Trim() + ".dll";
+
+            return Assembly.LoadFrom(file);
+        }
+
+        private string GetVersionInfo(Type target)
+        {
+            return "Type name: " + target.FullName + "\r\n"+
+                   ".NET Version: " + Environment.Version + "\r\n" +
+                   "Reflection Assembly: " + target.Assembly.CodeBase.Replace("file:///", "").Replace("/", "\\") + "\r\n" +
+                   "Assembly Cur Dir: " + Directory.GetCurrentDirectory() + "\r\n" +
+                   "ApplicationBase: " + AppDomain.CurrentDomain.SetupInformation.ApplicationBase + "\r\n" +
+                   "GetExecutingAssembly: " + Assembly.GetExecutingAssembly().Location + "\r\n" +
+                   "App Domain: " + AppDomain.CurrentDomain.FriendlyName + "\r\n";
+        }
+
         /// <summary>
         /// 
         /// </summary>
