@@ -25,6 +25,8 @@ namespace Huygens.Internal
         public MemoryConnection(SerialisableRequest request)
         {
             _request = request;
+            if (_request.Headers == null) _request.Headers = new Dictionary<string, string>();
+
             _headersRead = false;
 
             Id = Guid.NewGuid();
@@ -116,7 +118,7 @@ namespace Huygens.Internal
                 _headersRead = true;
                 return RequestHeaderBytes();
             }
-            return _request.Content;
+            return _request.Content ?? new byte[0];
         }
         
         private byte[] RequestHeaderBytes()

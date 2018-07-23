@@ -30,6 +30,26 @@ namespace HuygensTests
                 Console.WriteLine(resultString);
             }
         }
+        
+        [Test]
+        public void can_pass_null_headers () {
+            using (var subject = new DirectServer(@"C:\Temp\WrappedSites\1_rolling")) // a published site
+            {
+                var request = new SerialisableRequest{
+                    Method = "GET",
+                    RequestUri = "/values",
+                    Headers = null,
+                    Content = null
+                };
+                var result = subject.DirectCall(request);
+
+
+                Assert.That(result, Is.Not.Null);
+                var resultString = Encoding.UTF8.GetString(result.Content);
+                Assert.That(result.StatusCode, Is.EqualTo(200), "Unexpected code:" + result.StatusCode + ". Body = " + resultString);
+                Console.WriteLine(resultString);
+            }
+        }
 
         [Test]
         public void a_server_can_accept_repeated_calls () {

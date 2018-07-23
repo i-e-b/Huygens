@@ -39,6 +39,11 @@ namespace Huygens.Internal
         }
 
         /// <summary>
+        /// True until an app domain unloaded event is fired
+        /// </summary>
+        public bool DomainLoaded { get; set; }
+
+        /// <summary>
         /// Create a host
         /// </summary>
         public Host()
@@ -122,6 +127,9 @@ namespace Huygens.Internal
         public void Configure(GenericServer server, int port, string virtualPath, string physicalPath, bool disableDirectoryListing)
         {
             _server = server;
+            
+            DomainLoaded = true;
+            AppDomain.CurrentDomain.DomainUnload += CurrentDomain_DomainUnload;
 
             Port = port;
             VirtualPath = virtualPath;
@@ -136,6 +144,11 @@ namespace Huygens.Internal
             PhysicalClientScriptPath = HttpRuntime.AspClientScriptPhysicalPath + "\\";
             NormalizedClientScriptPath =
                 CultureInfo.InvariantCulture.TextInfo.ToLower(HttpRuntime.AspClientScriptVirtualPath + "/");
+        }
+
+        private void CurrentDomain_DomainUnload(object sender, EventArgs e)
+        {
+            DomainLoaded = false;
         }
 
         /// <summary>Obtains a lifetime service object to control the lifetime policy for this instance.</summary>

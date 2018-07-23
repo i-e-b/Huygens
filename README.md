@@ -2,6 +2,7 @@
 Cut down CassiniDev server for internally hosting IIS sites
 
 https://www.nuget.org/packages/Huygens
+https://github.com/i-e-b/Huygens
 
 Derived from https://archive.codeplex.com/?p=cassinidev and released under the same license.
 
@@ -10,9 +11,15 @@ Has functionality equivalent to the IIS Developer server.
 Can expose IP ports or keep sites internal to your process.
 Supports .Net MVC and Web APIs
 
+The library contains a set of interfaces and wrappers under the `Huygens.Compatibility` namespace, to help
+convert between the many different HTTP request and response types in the .Net ecosystem.
+
 To do:
-* [ ] Decode HTTP chunked?
-* [ ] Accept null Headers on requests
+
+* [ ] Decode HTTP chunked responses?
+* [ ] Add streaming input/output to direct server
+* [ ] Add OWIN rq/tx to the compatibility classes
+* [x] Accept null Headers on requests
 
 ## Internal hosting
 
@@ -38,8 +45,11 @@ using (var server = new DirectServer(@"C:\inetpub\wwwroot\PublishSample")) // a 
 ```
 
 Creating a new `DirectServer` takes a few seconds, but it can handle an unlimited number of `DirectCall` requests.
+More than one site can be hosted in a parent process.
 
 ## External hosting
+
+You can expose the site to a port like this:
 
 ```csharp
 using (var server = SocketServer(32768, "/", @"C:\inetpub\wwwroot\PublishSample"))
@@ -51,6 +61,9 @@ using (var server = SocketServer(32768, "/", @"C:\inetpub\wwwroot\PublishSample"
     server.Stop();
 }
 ```
+
+Creating a new `SocketServer` takes a few seconds, but it can handle an unlimited number of calls.
+Note that if you want to host more than one `SocketServer` in your process, each must have its own IP address.
 
 ## Azure hosting
 
