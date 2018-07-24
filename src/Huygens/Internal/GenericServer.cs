@@ -146,11 +146,18 @@ namespace Huygens.Internal
             if (_shutdownInProgress) return null;
 
             var host = _host;
-            if (host != null) {
-                if (host.DomainLoaded) return host;
-
-                try { _host.Shutdown(); } catch (Exception){ /*Ignore*/ }
-                _host = null;
+            if (host != null)
+            {
+                try
+                {
+                    if (host.DomainLoaded) return host;
+                    try { _host.Shutdown(); } catch (Exception) { /*Ignore*/ }
+                    _host = null;
+                }
+                catch (AppDomainUnloadedException)
+                {
+                    _host = null;
+                }
             }
 
             lock (_lockObject)
