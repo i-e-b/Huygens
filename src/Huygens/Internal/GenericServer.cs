@@ -120,28 +120,27 @@ namespace Huygens.Internal
         /// </summary>
         /// <param name="conn"></param>
         /// <param name="userName"></param>
-        public virtual void OnRequestEnd(IConnection conn, string userName)
+        public void OnRequestEnd(IConnection conn, string userName)
         {
             try
             {
-                LogInfo connRequestLogClone = conn.RequestLog.Clone();
-                connRequestLogClone.Identity = userName;
-                LogInfo connResponseLogClone = conn.ResponseLog.Clone();
-                connResponseLogClone.Identity = userName;
-                OnRequestComplete(conn.Id, connRequestLogClone, connResponseLogClone);
+                var connRequestLogClone = conn.RequestLog?.Clone();
+                if (connRequestLogClone != null) connRequestLogClone.Identity = userName;
+                var connResponseLogClone = conn.ResponseLog?.Clone();
+                if (connResponseLogClone != null) connResponseLogClone.Identity = userName;
+                if (RequestComplete != null) OnRequestComplete(conn.Id, connRequestLogClone, connResponseLogClone);
             }
             catch
             {
                 // swallow - we don't want consumer killing the server
             }
             if (conn is MarshalByRefObject mbr) RemotingServices.Disconnect(mbr);
-            //DecrementRequestCount();
         }
         
         /// <summary>
         /// Load and configure host if required
         /// </summary>
-        public virtual Host GetHost()
+        public Host GetHost()
         {
             if (_shutdownInProgress) return null;
 
@@ -151,7 +150,6 @@ namespace Huygens.Internal
                 try
                 {
                     if (host.DomainLoaded) return host;
-                    try { _host.Shutdown(); } catch (Exception) { /*Ignore*/ }
                     _host = null;
                 }
                 catch (AppDomainUnloadedException)

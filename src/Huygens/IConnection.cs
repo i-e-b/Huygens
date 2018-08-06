@@ -97,6 +97,6 @@ namespace Huygens
         /// <summary>
         /// Output headers to the response
         /// </summary>
-        void WriteHeaders(int statusCode, IDictionary<string, string> extraHeaders);
+        void WriteHeaders(int statusCode, IDictionary<string, string> extraHeaders, string responseStatusString);
     }
 }

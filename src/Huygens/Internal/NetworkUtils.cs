@@ -1805,5 +1805,36 @@ namespace Huygens.Internal
                     @"^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z]|[A-Za-z][A-Za-z0-9\-]*[A-Za-z0-9])$");
             return hostnameRx.IsMatch(hostname);
         }
+
+        /// <summary>
+        /// Give a standard status description for a status code.
+        /// If not known, this returns an empty string
+        /// </summary>
+        /// <remarks>
+        /// We only handle a few common ones here. For a more comprehensive
+        /// solution, see HttpWorkerRequest.GetStatusDescription(...)
+        /// </remarks>
+        public static string StandardDescription(int statusCode)
+        {
+            switch (statusCode) {
+                case 100: return "Continue";
+                case 200: return "OK";
+                case 300: return "Multiple Choices";
+                case 301: return "Moved Permanently";
+                case 302: return "Found";
+                case 304: return "Not Modified";
+                case 307: return "Temporary Redirect";
+                case 400: return "Bad Request";
+                case 401: return "Unauthorized";
+                case 403: return "Forbidden";
+                case 404: return "Not Found";
+                case 410: return "Gone";
+                case 500: return "Internal Server Error";
+                case 501: return "Not Implemented";
+                case 503: return "Service Unavailable";
+
+                default: return string.Empty;
+            }
+        }
     }
 }

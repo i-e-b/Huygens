@@ -33,5 +33,31 @@ namespace Huygens
         /// Header dictionary
         /// </summary>
         public Dictionary<string, string> Headers { get; set; }
+
+        /// <summary>
+        /// Make a deep copy of this request
+        /// </summary>
+        public SerialisableRequest Clone()
+        {
+            var result = new SerialisableRequest
+            {
+                CommandControl = CommandControl,
+                Method = Method,
+                RequestUri = RequestUri,
+                Headers = CopyOf(Headers)
+            };
+            if (Content != null) result.Content = (byte[])Content.Clone();
+            return result;
+        }
+
+        private Dictionary<string, string> CopyOf(Dictionary<string, string> original)
+        {
+            var result = new Dictionary<string,string>();
+            foreach (var kvp in original)
+            {
+                result.Add(kvp.Key, kvp.Value);
+            }
+            return result;
+        }
     }
 }

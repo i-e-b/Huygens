@@ -318,7 +318,7 @@ namespace Huygens.Internal
         }
         
         /// <inheritdoc />
-        public void WriteHeaders(int statusCode, IDictionary<string, string> extraHeaders)
+        public void WriteHeaders(int statusCode, IDictionary<string, string> extraHeaders, string responseStatusString)
         {
             string headers = MakeResponseHeaders(statusCode, extraHeaders, -1, false);
 

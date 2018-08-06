@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Reflection;
+using System.Diagnostics;
 using System.Text;
+using DispatchSharp;
 using Huygens;
 
 namespace SimpleSample
@@ -10,7 +11,7 @@ namespace SimpleSample
     {
         static void Main()
         {
-            using (var subject = new DirectServer(@"C:\Temp\WrappedSites\1_rolling")) // a published site
+            using (var subject = new DirectServer(@"C:\Temp\WrappedSites_Disabled\no_appins")) // a published site
             {
                 var request = new SerialisableRequest{
                     Method = "GET",
@@ -20,29 +21,44 @@ namespace SimpleSample
                     },
                     Content = null
                 };
+
+                // Make a whole load of calls for profiling
+                int i;
+                var dispatcher = Dispatch<SerialisableRequest>.CreateDefaultMultithreaded("LoadTest", 4);
+
+                dispatcher.AddConsumer(rq =>
+                {
+                    // ReSharper disable once AccessToDisposedClosure
+                    var result = subject.DirectCall(request);
+                    if (rq.CommandControl != null)
+                    {
+                        var resultString = Encoding.UTF8.GetString(result?.Content ?? new byte[0]);
+                        Console.Write(rq.CommandControl);
+                        Console.WriteLine(resultString);
+                    }
+                });
+
+                var sw = new Stopwatch();
+                sw.Start();
+                dispatcher.Start();
                 
-                // Attempt to break the bug
-                var versionInfoType = typeof(System.Web.HttpApplication).Assembly.GetType("System.Web.Util.VersionInfo");
-                var exeNameField = versionInfoType.GetField("_exeName", BindingFlags.Static | BindingFlags.NonPublic);
-                exeNameField.SetValue(null, "AnythingElse.exe");
+                for (i = 0; i < 10000; i++)
+                {
+                    if (i % 100 == 0) {
+                        var traceRequest = request.Clone();
+                        traceRequest.CommandControl = i.ToString();
+                        dispatcher.AddWork(traceRequest);
+                    } else dispatcher.AddWork(request);
 
-                // This call fails if the exe is named "w3wp.exe", but not otherwise.
-                // There is some janky testing happening in the .Net code I need to figure out.
-                var result = subject.DirectCall(request);
-
-
-                // note points -- System.Web.Hosting.ApplicationManager
-                //                                  .RecycleLimitMonitor                                <-- maybe a replacable static here?
-                //                                  .AspNetMemoryMonitor :: s_processPrivateBytesLimit  <-- can I fake this?
-                //                System.Web.Hosting.UnsafeIISMethods.MgdGetSiteNameFromId              <-- this is where is blows up (unmanaged crap)
+                }
+                dispatcher.WaitForEmptyQueueAndStop();	// only call this if you're not filling the queue from elsewhere
 
 
-                // maybe change System.Web.Util.VersionInfo :: _exeName
+                sw.Stop();
+                var rate = i / sw.Elapsed.TotalSeconds;
+                Console.WriteLine("calls per second: " + rate);
 
-                // maybe _applicationManager._theAppManager can be faked out?
 
-                var resultString = Encoding.UTF8.GetString(result.Content);
-                Console.WriteLine(resultString);
 
                 Console.WriteLine("[Done]");
                 Console.ReadLine();

@@ -60,8 +60,6 @@ namespace Huygens.Internal
                 "/app_webreferences"
             };
 
-        private readonly IStackWalk _connectionPermission;
-
         private readonly Host _host;
         private readonly GenericServer _server;
 
@@ -108,6 +106,7 @@ namespace Huygens.Internal
         private Dictionary<string,string> _responseHeadersBuilder;
 
         private int _responseStatus;
+        private string _responseStatusString;
 
         private bool _specialCaseStaticFileHeaders;
 
@@ -124,18 +123,18 @@ namespace Huygens.Internal
         /// Create a request
         /// </summary>
         public Request(GenericServer server, Host host, IConnection connection)
-            : base(String.Empty, String.Empty, null)
+            : base(string.Empty, string.Empty, null)
         {
-            _connectionPermission = new PermissionSet(PermissionState.Unrestricted);
+            new PermissionSet(PermissionState.Unrestricted).Assert();
             _server = server;
             _host = host;
             _connection = connection;
         }
+        
 
         /// <inheritdoc />
         public override void CloseConnection()
         {
-            _connectionPermission.Assert();
             _connection.Close();
         }
 
@@ -162,11 +161,9 @@ namespace Huygens.Internal
                 }
             }
 
-            _connectionPermission.Assert();
-
             if (!_headersSent)
             {
-                _connection.WriteHeaders(_responseStatus, _responseHeadersBuilder);
+                _connection.WriteHeaders(_responseStatus, _responseHeadersBuilder, _responseStatusString);
 
                 _headersSent = true;
             }
@@ -228,7 +225,6 @@ namespace Huygens.Internal
         /// <inheritdoc />
         public override string GetLocalAddress()
         {
-            _connectionPermission.Assert();
             return _connection.LocalIP;
         }
 
@@ -271,7 +267,6 @@ namespace Huygens.Internal
         /// <inheritdoc />
         public override string GetRemoteAddress()
         {
-            _connectionPermission.Assert();
             return _connection.RemoteIP;
         }
 
@@ -284,12 +279,7 @@ namespace Huygens.Internal
         /// <inheritdoc />
         public override string GetServerName()
         {
-            string localAddress = GetLocalAddress();
-            if (localAddress.Equals("127.0.0.1"))
-            {
-                return "localhost";
-            }
-            return localAddress;
+            return GetLocalAddress();
         }
 
         /// <inheritdoc />
@@ -381,7 +371,6 @@ namespace Huygens.Internal
         /// <returns></returns>
         public override bool IsClientConnected()
         {
-            _connectionPermission.Assert();
             return _connection.Connected;
         }
 
@@ -494,7 +483,6 @@ namespace Huygens.Internal
         {
             int bytesRead = 0;
 
-            _connectionPermission.Assert();
             byte[] bytes = _connection.ReadRequestBytes(size);
 
             if (bytes != null && bytes.Length > 0)
@@ -637,6 +625,7 @@ namespace Huygens.Internal
         public override void SendStatus(int statusCode, string statusDescription)
         {
             _responseStatus = statusCode;
+            _responseStatusString = statusDescription;
         }
 
         /// <inheritdoc />
@@ -864,6 +853,7 @@ namespace Huygens.Internal
         {
             _headersSent = false;
             _responseStatus = 200;
+            _responseStatusString = "OK";
             _responseHeadersBuilder = new Dictionary<string, string>();
             _responseBodyBytes = new List<byte[]>();
         }
