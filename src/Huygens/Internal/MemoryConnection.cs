@@ -31,11 +31,9 @@ namespace Huygens.Internal
 
             _headersRead = false;
 
-            Id = Guid.Empty;//NewGuid();
+            Id = Guid.Empty;
             LocalIP = UnknownLocalIP;
             RemoteIP = UnknownRemoteIP;
-            //RequestLog = new LogInfo();
-            //ResponseLog = new LogInfo();
 
             _resultBody = new MemoryStream();
             _result = new SerialisableResponse{

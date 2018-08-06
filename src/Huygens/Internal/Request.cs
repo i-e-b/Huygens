@@ -145,7 +145,7 @@ namespace Huygens.Internal
             if (conn != null)
             {
                 _connection = null;
-                _server.OnRequestEnd(conn, System.Security.Principal.WindowsIdentity.GetCurrent().Name);
+                _server.OnRequestEnd(conn, null);
             }
         }
 
@@ -172,7 +172,7 @@ namespace Huygens.Internal
                 _connection.WriteBody(bytes, 0, bytes.Length);
             }
 
-            _responseBodyBytes = new List<byte[]>();
+            _responseBodyBytes.Clear();
 
             if (finalFlush)
             {
