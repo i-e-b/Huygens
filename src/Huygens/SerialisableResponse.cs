@@ -28,5 +28,18 @@ namespace Huygens
         /// Headers returned from server
         /// </summary>
         public Dictionary<string, string[]> Headers { get; set; }
+
+        /// <summary>
+        /// Create a new empty response object
+        /// </summary>
+        public static SerialisableResponse CreateEmpty()
+        {
+            return new SerialisableResponse{
+                Headers = new Dictionary<string, string[]>(),
+                Content = null,
+                StatusCode = 200,
+                StatusMessage = "OK"
+            };
+        }
     }
 }

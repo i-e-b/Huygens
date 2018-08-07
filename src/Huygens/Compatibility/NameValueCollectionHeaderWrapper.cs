@@ -37,6 +37,13 @@ namespace Huygens.Compatibility
         }
 
         /// <inheritdoc />
+        public void Set(string name, string value)
+        {
+            _nvc.Remove(name);
+            _nvc.Add(name, value);
+        }
+
+        /// <inheritdoc />
         public string this[string name]
         {
             get { return _nvc[name]; }

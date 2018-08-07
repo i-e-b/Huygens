@@ -2,6 +2,7 @@
 using System.Collections.Specialized;
 using System.Linq;
 using System.Net;
+using System.Text;
 using System.Web;
 
 namespace Huygens.Compatibility
@@ -172,6 +173,56 @@ namespace Huygens.Compatibility
             var redirectUrl = request.Url.Scheme + "://" + request.Url.Host + "/" + url;
             response.Redirect(redirectUrl, false);
             response.Close();
+        }
+
+        /// <summary>
+        /// Parse a query string into a name-value collection
+        /// </summary>
+        public static NameValueCollection ParseQueryString(this string query)
+        {
+            var outp = new NameValueCollection();
+            FillFromString(query, true, outp);
+            return outp;
+        }
+
+        // Derived from System.Web.HttpValueCollection
+        internal static void FillFromString(string s, bool urlencoded, NameValueCollection coll)
+        {
+            if (string.IsNullOrWhiteSpace(s)) return;
+
+            int num1 = s.Length;
+            for (int index = 0; index < num1; ++index)
+            {
+                int startIndex = index;
+                int num2 = -1;
+                for (; index < num1; ++index)
+                {
+                    switch (s[index])
+                    {
+                        case '&':
+                            goto label_7;
+                        case '=':
+                            if (num2 < 0) { num2 = index; }
+                            break;
+                    }
+                }
+                label_7:
+                string str1 = null;
+                string str2;
+                if (num2 >= 0)
+                {
+                    str1 = s.Substring(startIndex, num2 - startIndex);
+                    str2 = s.Substring(num2 + 1, index - num2 - 1);
+                }
+                else
+                    str2 = s.Substring(startIndex, index - startIndex);
+                if (urlencoded)
+                    coll.Add(HttpUtility.UrlDecode(str1), HttpUtility.UrlDecode(str2));
+                else
+                    coll.Add(str1, str2);
+                if (index == num1 - 1 && s[index] == 38)
+                    coll.Add(null, string.Empty);
+            }
         }
     }
 }

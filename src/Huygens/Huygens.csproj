@@ -40,6 +40,8 @@
     <Reference Include="System.Web" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Compatibility\DictionaryArrayHeaderWrapper.cs" />
+    <Compile Include="Compatibility\DictionaryHeaderWrapper.cs" />
     <Compile Include="Compatibility\HttpContextWrapper.cs" />
     <Compile Include="Compatibility\HttpConverters.cs" />
     <Compile Include="Compatibility\HttpListenerContextWrapper.cs" />
@@ -53,6 +55,9 @@
     <Compile Include="Compatibility\IRequest.cs" />
     <Compile Include="Compatibility\IResponse.cs" />
     <Compile Include="Compatibility\NameValueCollectionHeaderWrapper.cs" />
+    <Compile Include="Compatibility\SerialisableContext.cs" />
+    <Compile Include="Compatibility\SerialisableRequestWrapper.cs" />
+    <Compile Include="Compatibility\SerialisableResponseWrapper.cs" />
     <Compile Include="Compatibility\SubstringExtensions.cs" />
     <Compile Include="Internal\AssemblyReflectionManager.cs" />
     <Compile Include="Internal\AssemblyReflectionProxy.cs" />

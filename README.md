@@ -17,9 +17,8 @@ convert between the many different HTTP request and response types in the .Net e
 To do:
 
 * [ ] Decode HTTP chunked responses?
-* [ ] Add streaming input/output to direct server
 * [ ] Add OWIN rq/tx to the compatibility classes
-* [x] Accept null Headers on requests
+* [ ] Allow DirectCall to use IRequest/IResponse or IContext
 
 ## Internal hosting
 

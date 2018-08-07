@@ -17,6 +17,7 @@ namespace Huygens.Compatibility
         public static SerialisableRequest ConvertToSerialisable(IRequest request) {
             var newRq = new SerialisableRequest
             {
+                IsSecureConnection = request.IsSecureConnection,
                 Content = GetBytes(request.InputStream),
                 Method = request.HttpMethod,
                 RequestUri = request.Url.PathAndQuery,

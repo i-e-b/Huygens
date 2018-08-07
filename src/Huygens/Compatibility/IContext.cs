@@ -9,19 +9,18 @@ namespace Huygens.Compatibility
     public interface IContext
     {
         /// <summary>
-        /// Endpoint
+        /// Endpoint address of requesting client
         /// </summary>
         IPAddress EndpointAddress();
 
         /// <summary>
-        /// Http verb (also known as Method)
+        /// Http request verb (also known as Method)
         /// </summary>
         string Verb();
 
         /// <summary>
         /// Path segment of URL
         /// </summary>
-        /// <returns></returns>
         string Path();
 
         /// <summary>

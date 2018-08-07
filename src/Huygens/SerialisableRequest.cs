@@ -35,12 +35,18 @@ namespace Huygens
         public Dictionary<string, string> Headers { get; set; }
 
         /// <summary>
+        /// Flag to indicate if any communication channels are secure. (e.g. over HTTPS)
+        /// </summary>
+        public bool IsSecureConnection { get; set; }
+
+        /// <summary>
         /// Make a deep copy of this request
         /// </summary>
         public SerialisableRequest Clone()
         {
             var result = new SerialisableRequest
             {
+                IsSecureConnection = IsSecureConnection,
                 CommandControl = CommandControl,
                 Method = Method,
                 RequestUri = RequestUri,

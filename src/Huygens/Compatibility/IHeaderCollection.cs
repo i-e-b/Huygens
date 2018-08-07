@@ -21,6 +21,11 @@ namespace Huygens.Compatibility
         /// Add a new value
         /// </summary>
         void Add(string name, string value);
+
+        /// <summary>
+        /// Add a new value, removing any existing values
+        /// </summary>
+        void Set(string name, string value);
         
         /// <summary>
         /// Get value by key name
