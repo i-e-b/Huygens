@@ -51,7 +51,7 @@ More than one site can be hosted in a parent process.
 You can expose the site to a port like this:
 
 ```csharp
-using (var server = SocketServer(32768, "/", @"C:\inetpub\wwwroot\PublishSample"))
+using (var server = new SocketServer(32768, "/", @"C:\inetpub\wwwroot\PublishSample"))
 {
     server.Start();
 
