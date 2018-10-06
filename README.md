@@ -57,7 +57,7 @@ using (var server = new SocketServer(32768, "/", @"C:\inetpub\wwwroot\PublishSam
 
     // accessible to web browsers etc.
 
-    server.Stop();
+    server.ShutDown();
 }
 ```
 
