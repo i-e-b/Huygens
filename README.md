@@ -14,6 +14,8 @@ Supports .Net MVC and Web APIs
 The library contains a set of interfaces and wrappers under the `Huygens.Compatibility` namespace, to help
 convert between the many different HTTP request and response types in the .Net ecosystem.
 
+**NOTE** Huygen does not support running sites hosted with `Microsoft.Owin`
+
 To do:
 
 * [ ] Decode HTTP chunked responses?
