@@ -1,4 +1,7 @@
-﻿# Huygens
+
+**NOTE** Huygen does not support running sites hosted with `Microsoft.Owin`
+ 
+# Huygens
 Cut down CassiniDev server for internally hosting IIS sites
 
 https://www.nuget.org/packages/Huygens
