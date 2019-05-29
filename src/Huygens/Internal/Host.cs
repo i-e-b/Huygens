@@ -24,7 +24,7 @@ namespace Huygens.Internal
     /// <summary>
     /// Host for IIS site
     /// </summary>  
-    public class Host : MarshalByRefObject, IRegisteredObject
+    public class Host : MarshalByRefObject, IHost
     {
         private string _lowerCasedVirtualPath;
         private volatile int _pendingCallsCount;

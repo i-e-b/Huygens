@@ -69,6 +69,26 @@ using (var server = new SocketServer(32768, "/", @"C:\inetpub\wwwroot\PublishSam
 Creating a new `SocketServer` takes a few seconds, but it can handle an unlimited number of calls.
 Note that if you want to host more than one `SocketServer` in your process, each must have its own IP address.
 
+## Self-hosting
+
+Huygens can be used as a small socket server for testing and selfhosting (much as .Net's `HttpListener`).
+
+```csharp
+var host = new TestHost();
+using (var subject = new SocketSelfHostServer(8082, host)) {
+    subject.Start();
+    while (true) { Thread.Sleep(2000); }
+}
+
+public class TestHost : IHost {
+    public void ProcessRequest(IConnection conn)
+    {
+        conn.WriteEntireResponseFromString(200, null, "Hello, world", false);
+    }
+// . . .
+}
+```
+
 ## Azure hosting
 
 You can't use the `SocketServer` on Azure, due to permissions limitations. The `DirectServer` is usable as long as you have a **B1** or higher application service plan, and your host app has the *Application Setting* `WEBSITE_LOAD_USER_PROFILE` = `1`

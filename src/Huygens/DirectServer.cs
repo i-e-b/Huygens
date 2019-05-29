@@ -42,7 +42,7 @@ namespace Huygens
         public SerialisableResponse DirectCall(SerialisableRequest request)
         {
             var conn = new MemoryConnection(request);
-            GetHost().ProcessRequest(conn);
+            GetHost()?.ProcessRequest(conn);
             return conn.GenerateResponse();
         }
 

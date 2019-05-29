@@ -71,11 +71,17 @@ namespace Huygens
             _lockObject = new object();
             Port = port;
             VirtualPath = virtualPath;
-            PhysicalPath = Path.GetFullPath(physicalPath);
-            PhysicalPath = PhysicalPath.EndsWith("\\", StringComparison.Ordinal)
-                                ? PhysicalPath
-                                : PhysicalPath + "\\";
-
+            if (physicalPath != null)
+            {
+                PhysicalPath = Path.GetFullPath(physicalPath);
+                PhysicalPath = PhysicalPath.EndsWith("\\", StringComparison.Ordinal)
+                                    ? PhysicalPath
+                                    : PhysicalPath + "\\";
+            }
+            else
+            {
+                physicalPath = ".";
+            }
             string uniqueAppString = string.Concat(virtualPath, physicalPath,":",Port.ToString()).ToLowerInvariant();
             AppId = (uniqueAppString.GetHashCode()).ToString("x", CultureInfo.InvariantCulture);
         }
@@ -157,7 +163,7 @@ namespace Huygens
                                             return;
                                         }
 
-                                        Host host = GetHost();
+                                        IHost host = GetHost();
 
                                         if (host == null)
                                         {
@@ -219,6 +225,7 @@ namespace Huygens
             try
             {
                 _host?.Shutdown();
+                PostShutdown();
 
                 // the host is going to raise an event that this class uses to null the field.
                 // just wait until the field is nulled and continue.
@@ -230,6 +237,13 @@ namespace Huygens
             }
             catch { Ignore(); }
   
+        }
+
+        /// <summary>
+        /// An opportunity for the server to clean up after the host has shut down.
+        /// </summary>
+        protected virtual void PostShutdown()
+        {
         }
 
         private void Ignore() { }

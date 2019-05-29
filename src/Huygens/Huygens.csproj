@@ -63,6 +63,7 @@
     <Compile Include="Internal\AssemblyReflectionProxy.cs" />
     <Compile Include="Internal\GenericServer.cs" />
     <Compile Include="DirectServer.cs" />
+    <Compile Include="Internal\IHost.cs" />
     <Compile Include="Internal\MemoryConnection.cs" />
     <Compile Include="SerialisableRequest.cs" />
     <Compile Include="SerialisableResponse.cs" />
@@ -75,6 +76,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Internal\Request.cs" />
     <Compile Include="Internal\RequestEventArgs.cs" />
+    <Compile Include="SocketSelfHostServer.cs" />
     <Compile Include="SocketServer.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

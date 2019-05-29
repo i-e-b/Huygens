@@ -60,7 +60,7 @@ namespace Huygens.Internal
                 "/app_webreferences"
             };
 
-        private readonly Host _host;
+        private readonly IHost _host;
         private readonly GenericServer _server;
 
         private string _allRawHeaders;
@@ -122,7 +122,7 @@ namespace Huygens.Internal
         /// <summary>
         /// Create a request
         /// </summary>
-        public Request(GenericServer server, Host host, IConnection connection)
+        public Request(GenericServer server, IHost host, IConnection connection)
             : base(string.Empty, string.Empty, null)
         {
             new PermissionSet(PermissionState.Unrestricted).Assert();

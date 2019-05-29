@@ -46,7 +46,7 @@ namespace Huygens.Internal
         /// <summary>
         /// Connected host (if any)
         /// </summary>
-        protected Host _host;
+        protected IHost _host;
 
         /// <summary>
         /// Shutdown lock
@@ -140,7 +140,7 @@ namespace Huygens.Internal
         /// <summary>
         /// Load and configure host if required
         /// </summary>
-        public Host GetHost()
+        public virtual IHost GetHost()
         {
             if (_shutdownInProgress) return null;
 
